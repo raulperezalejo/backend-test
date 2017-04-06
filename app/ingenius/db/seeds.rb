@@ -13,3 +13,5 @@ Category.create(name: 'Party')
 
 Place.create(name: 'Habana')
 Place.create(name: 'Montevideo')
+
+User.create(email: 'test@test.com', password: 'test123', password_confirmation: 'test123' )
