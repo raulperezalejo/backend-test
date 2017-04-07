@@ -1,15 +1,18 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :edit, :update, :destroy]
+  before_action :set_place_category, only: [:new, :edit]
 
   # GET /events
   # GET /events.json
   def index
-    @events = Event.all
+    @events = Event.all.page(params[:page]).per(10)
+    @featureds = Event.where(featured: true)
   end
 
   # GET /events/1
   # GET /events/1.json
   def show
+    @schedules = Schedule.where(event_id: @event.id)
   end
 
   # GET /events/new
@@ -65,6 +68,11 @@ class EventsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_event
       @event = Event.find(params[:id])
+    end
+
+    def set_place_category
+      @categories = Category.all
+      @places = Place.all
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

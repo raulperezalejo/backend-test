@@ -1,39 +1,41 @@
-<p id="notice"><%= notice %></p>
+<div class="col-xs-12 col-md-8">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1><%= @event.title %></h1>
+      <h3><%= @event.place.name %></h3>
+      <h5><%= @event.category.name %></h5>
+    </div>
+    <%= @event.description %>
+  </div>
+</div>
+<aside class="col-xs-12 col-md-4">
+  <div class="row">
+    <div class="col-xs-12">
+      <%= @event.image %>
+    </div>
+    <div class="col-xs-12">
+      <table class="table table-hover table-condensed table-bordered">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+              <% @schedules.each do |date| %>
+                <tr>
+                  <td><%= date.schedule_date.strftime("%d/%m/%Y")%></td>
+                  <td><%= date.schedule_date.strftime("%H:%M") %></td>
+                  <td><%= date.price %></td>
+                </tr>
+              <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</aside>
 
-<p>
-  <strong>Title:</strong>
-  <%= @event.title %>
-</p>
-
-<p>
-  <strong>Description:</strong>
-  <%= @event.description %>
-</p>
-
-<p>
-  <strong>Featured:</strong>
-  <%= @event.featured %>
-</p>
-
-<p>
-  <strong>Image:</strong>
-  <%= @event.image %>
-</p>
-
-<p>
-  <strong>Place:</strong>
-  <%= @event.place %>
-</p>
-
-<p>
-  <strong>Category:</strong>
-  <%= @event.category %>
-</p>
-
-<p>
-  <strong>Dates:</strong>
-  <%= @event.dates %>
-</p>
 
 <%= link_to 'Edit', edit_event_path(@event) %> |
 <%= link_to 'Back', events_path %>
