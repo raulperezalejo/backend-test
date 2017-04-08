@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :categories
   resources :events do
     resources :comments
+    post '/schedules' => 'schedules#create'
   end
   devise_for :users
 

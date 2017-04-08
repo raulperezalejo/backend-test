@@ -10,6 +10,8 @@ class PlacesController < ApplicationController
   # GET /places/1
   # GET /places/1.json
   def show
+    @events = Event.where(place_id: params[:id]).page(params[:page]).per(10)
+    @featureds = Event.where(place_id: params[:id], featured: true )
   end
 
   # GET /places/new

@@ -5,7 +5,7 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.json
   def index
-    @events = Event.all.page(params[:page]).per(10)
+    @events = Event.all.page(params[:page]).per(12)
     @featureds = Event.where(featured: true)
   end
 
@@ -67,7 +67,7 @@ class EventsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_event
-      @event = Event.find(params[:id])
+      @event = Event.friendly.find(params[:id])
     end
 
     def set_place_category

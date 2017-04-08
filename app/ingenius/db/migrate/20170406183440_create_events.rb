@@ -5,8 +5,8 @@ class CreateEvents < ActiveRecord::Migration
       t.text :description
       t.boolean :featured
       t.string :image
-      t.references :place
-      t.references :category
+      t.references :place, index: true
+      t.references :category, index: true
       t.date :dates
 
       t.timestamps null: false

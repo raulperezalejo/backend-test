@@ -10,6 +10,8 @@ class CategoriesController < ApplicationController
   # GET /categories/1
   # GET /categories/1.json
   def show
+    @events = Event.where(category_id: params[:id]).page(params[:page]).per(10)
+    @featureds = Event.where(category_id: params[:id], featured: true )
   end
 
   # GET /categories/new

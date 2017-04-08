@@ -1,9 +1,10 @@
 class Schedule < ActiveRecord::Base
 
   #Relations
-  has_many :event
+  belongs_to :event
 
   #Validations
-  validates_presence_of :price, :schedule_date
+  validates_presence_of :price, :date
+  validates_numericality_of :price
 
 end
