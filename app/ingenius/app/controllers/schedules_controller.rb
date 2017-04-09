@@ -1,9 +1,14 @@
 class SchedulesController < ApplicationController
 
   def create
-    @event = Event.find(params[:event_id])
-    @schedule = @event.schedules.create(schedules_params)
-    redirect_to event_path(@event)
+    @event = Event.friendly.find(params[:event_id])
+    @schedule = @event.schedules.new(schedules_params)
+    if @schedule.save
+      redirect_to edit_event_path(@event), notice: 'Programación añadida correctamente'
+    else
+      redirect_to edit_event_path(@event), alert: "Schedule " + @schedule.errors.full_messages.first
+    end
+
   end
 
   private

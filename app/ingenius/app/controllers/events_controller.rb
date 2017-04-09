@@ -1,6 +1,7 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :edit, :update, :destroy]
-  before_action :set_place_category, only: [:new, :edit]
+  before_action :set_place_category, only: [:new, :edit, :update]
+  before_action :set_schedules, only: [:new, :edit]
 
   # GET /events
   # GET /events.json
@@ -17,6 +18,9 @@ class EventsController < ApplicationController
 
   # GET /events/new
   def new
+    puts @categories
+    puts @places
+
     @event = Event.new
   end
 
@@ -31,7 +35,7 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.save
-        format.html { redirect_to @event, notice: 'Event was successfully created.' }
+        format.html { redirect_to edit_event_path(@event), notice: 'Evento creado, ahora puede añadir las fechas.' }
         format.json { render :show, status: :created, location: @event }
       else
         format.html { render :new }
@@ -70,6 +74,10 @@ class EventsController < ApplicationController
       @event = Event.friendly.find(params[:id])
     end
 
+    def set_schedules
+      @schedules = Schedule.where(event_id: params[:id])
+    end
+
     def set_place_category
       @categories = Category.all
       @places = Place.all
@@ -77,6 +85,6 @@ class EventsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
-      params.require(:event).permit(:title, :description, :featured, :image, :place, :category, :dates)
+      params.require(:event).permit(:title, :description, :featured, :image, :place, :category, :dates, :category_id, :place_id)
     end
 end

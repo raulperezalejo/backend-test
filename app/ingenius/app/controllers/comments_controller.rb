@@ -3,7 +3,7 @@ class CommentsController < ApplicationController
   def create
     @event = Event.friendly.find(params[:event_id])
     @comment = @event.comments.create(comment_params)
-    redirect_to event_path(@event), notice: 'Thanks for commenting on this event'
+    redirect_to event_path(@event), notice: 'Gracias, su comentario será tenido en cuenta'
   end
 
   private
