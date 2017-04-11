@@ -27,6 +27,9 @@ ActiveRecord::Schema.define(version: 20170407023343) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "comments", ["event_id"], name: "index_comments_on_event_id"
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id"
+
   create_table "events", force: :cascade do |t|
     t.string   "title"
     t.text     "description"
@@ -38,6 +41,9 @@ ActiveRecord::Schema.define(version: 20170407023343) do
     t.datetime "updated_at",  null: false
   end
 
+  add_index "events", ["category_id"], name: "index_events_on_category_id"
+  add_index "events", ["place_id"], name: "index_events_on_place_id"
+
   create_table "places", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -45,12 +51,14 @@ ActiveRecord::Schema.define(version: 20170407023343) do
   end
 
   create_table "schedules", force: :cascade do |t|
-    t.datetime "schedule_date"
+    t.datetime "date"
     t.integer  "price"
     t.integer  "event_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
+
+  add_index "schedules", ["event_id"], name: "index_schedules_on_event_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false

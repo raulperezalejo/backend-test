@@ -1,12 +1,15 @@
 Rails.application.routes.draw do
 
-  root 'events#index'
+  devise_scope :user do
+    root :to => "devise/sessions#new"
+  end
 
   resources :places
   resources :categories
   resources :events do
-    resources :comments
+    post '/comments' => 'comments#create'
     post '/schedules' => 'schedules#create'
+    delete '/schedules/:id' =>'schedules#destroy'
   end
   devise_for :users
 
