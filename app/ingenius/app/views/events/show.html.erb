@@ -5,37 +5,89 @@
       <h3><%= @event.place.name %></h3>
       <h5><%= @event.category.name %></h5>
     </div>
-    <%= @event.description %>
+    <div class="col-xs-12">
+      <%= @event.description%>
+    </div>
   </div>
 </div>
 <aside class="col-xs-12 col-md-4">
   <div class="row">
     <div class="col-xs-12">
-      <%= @event.image %>
+      <%= image_tag @event.image, class: "img-responsive" %>
     </div>
     <div class="col-xs-12">
       <table class="table table-hover table-condensed table-bordered">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Price</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Precio</th>
           </tr>
         </thead>
         <tbody>
+            <% if !@schedules.empty?%>
               <% @schedules.each do |date| %>
                 <tr>
-                  <td><%= date.schedule_date.strftime("%d/%m/%Y")%></td>
-                  <td><%= date.schedule_date.strftime("%H:%M") %></td>
-                  <td><%= date.price %></td>
+                  <td><%= date.date.strftime("%d/%m/%Y")%></td>
+                  <td><%= date.date.strftime("%H:%M") %></td>
+                  <td><%=  number_to_currency(date.price) %></td>
                 </tr>
               <% end %>
+          <%else%>
+            <tr>
+              <td colspan="3">
+                <div class="alert alert-info">Sin Programación</div>
+              </td>
+            </tr>
+          <%end%>
         </tbody>
       </table>
     </div>
   </div>
+
+  <%= link_to edit_event_path(@event), class:"edit" do %>
+      <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+  <%end%>
+
+
 </aside>
+<div class="col-xs-12 comments pull-left">
+  <div class="row">
+    <div class="col-xs-12">
+
+      <% @event.comments.each do |comment|%>
+
+      <div class="well well-xs">
+        <h4 class="text-uppercase"><%= comment.user.email %> </h4>
+        <div class="comment-date"><%= comment.created_at.strftime("%d/%m/%Y")%></div>
+        <p>
+          <%= comment.body %>
+        </p>
+      </div>
+
+     <%end%>
+
+    </div>
+  </div>
+
+  <div class="tab-pane active" id="add-comment">
+    <%= form_for([@event, @event.comments.build], html: { class:"form-horizontal"} ) do |f| %>
+        <div class="form-group">
+          <label for="addComments" class="col-xs-2 col-md-1 control-label">Comentario</label>
+          <div class="col-xs-10 col-md-11">
+            <%= f.text_area :body, class:"form-control", row:"5"  %>
+          </div>
+          <%= f.hidden_field :user_id, value: current_user.id %>
+
+        </div>
+        <div class="form-group">
+          <div class="col-xs-offset-1 col-xs-11">
+            <%= f.submit "Crear Comentario", class:"btn btn-primary"%>
+          </div>
+        </div>
+    <% end %>
+  </div>
+</div>
 
 
-<%= link_to 'Edit', edit_event_path(@event) %> |
-<%= link_to 'Back', events_path %>
+

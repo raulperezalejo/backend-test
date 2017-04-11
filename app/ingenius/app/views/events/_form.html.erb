@@ -1,37 +1,158 @@
 <%= form_for(@event) do |f| %>
   <% if @event.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(@event.errors.count, "error") %> prohibited this event from being saved:</h2>
-
-        <ul>
-          <% @event.errors.full_messages.each do |message| %>
-              <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
+        <% @event.errors.full_messages.each do |msg| %>
+            <div class="alert alert-danger" role="alert">
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+              <span class="sr-only">Error:</span>
+              <%=msg%>
+            </div>
+        <% end %>
   <% end %>
+
   <div class="col-xs-12 col-md-8">
     <div class="row">
       <div class="col-xs-12">
-        <h1><%= f.text_field :title %></h1>
+        <div class="form-group">
+          <h1><%= f.text_field :title, class:"form-control input-lg" %></h1>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="form-group">
+              <div class="row">
+                <div class="col-xs-12">
+                  <%= f.collection_select(:category_id, @categories, :id, :name, { :include_blank =>"Seleccione la categoría" }, { :class => 'form-control' }) %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <div class="row">
+                <div class="col-xs-12">
+                  <%= f.collection_select(:place_id, @places, :id, :name, { :include_blank =>'Seleccione el destino' }, { :class => 'form-control' }) %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.text_area :description, class:"form-control", rows:'10' %>
+        </div>
       </div>
-      <%= f.text_area :description %>
     </div>
   </div>
+
   <aside class="col-xs-12 col-md-4">
     <div class="row">
       <div class="col-xs-12">
-        <%= f.text_field :image %>
-        <%= f.text_field :featured %>
-        <%= f.collection_select(:place_id, @places, :id, :name, prompt: true) %>
-        <%= f.collection_select(:category_id, @categories, :id, :name, prompt: true) %>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="form-group">
+              <div class="input-group url">
+                <div class="input-group-addon">URL</div>
+                <%= f.text_field :image, class:"form-control" %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%# if params[:action]!='new' &&  params[:action]!='create'%>
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="checkbox">
+                <label>
+                  <%= f.check_box :featured %>
+                  <%= f.label :featured %>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-hover table-condensed table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Hora</th>
+                      <th>Precio</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @event.schedules.each do |date| %>
+                        <tr>
+                          <td><%= date.date.strftime("%d/%m/%Y")%></td>
+                          <td><%= date.date.strftime("%H:%M") %></td>
+                          <td><%= number_to_currency(date.price) %></td>
+                          <td>
+                            <%= link_to "/events/#{@event.id}/schedules/#{date.id}", remote: true, method: :delete, data: { confirm: 'Are you sure?' }, class:"remove" do %>
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            <%end%>
+                          </td>
+                        </tr>
+                    <% end %>
+                    <tr>
+                      <td colspan="4">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#schedule_modal">
+                          Añada Programación
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+          </div>
+        <%# end %>
       </div>
     </div>
   </aside>
 
+  <div class="col-xs-12">
+    <div class="form-group">
 
+      <%= f.submit class:"btn btn-success" %>
 
-  <div class="actions">
-    <%= f.submit %>
+      <%#if params[:action]=='edit'%>
+          <%#= link_to 'Show', @event, class:"btn btn-primary" %>
+          <%#= link_to 'Back', events_path, class:"btn btn-primary" %>
+      <%#else%>
+          <%#= link_to 'Back', events_path, class:"btn btn-primary" %>
+      <%#end%>
+
+    </div>
   </div>
 <% end %>
+
+
+<%# if params[:action]!='new' &&  params[:action]!='create'%>
+  <div class="modal fade" id="schedule_modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add a Schedule</h4>
+      </div>
+      <%= form_for([@event, @event.schedules.build]) do |f| %>
+          <div class="modal-body">
+            <div class="form-group">
+              <%= f.label :date, class:"control-label"%>
+              <div class='input-group date' id='datetimepicker1'>
+                <%= f.text_field :date , class:"form-control" %>
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <%= f.label :price, class:"control-label"%>
+              <%= f.number_field :price, class:"form-control"%>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <%= f.submit class:"btn btn-primary" %>
+          </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<%#end%>

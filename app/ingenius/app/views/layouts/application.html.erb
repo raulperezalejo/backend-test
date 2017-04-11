@@ -22,7 +22,7 @@
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <% if user_signed_in? %>
-            <li><%= link_to "Home", root_path %></li>
+            <li><%= link_to "Home", events_path %></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Places <span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -35,7 +35,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Categories <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <% categories.each do |place|%>
-                    <li><%= link_to place.name, place_path(place) %></li>
+                    <li><%= link_to place.name, category_path(place) %></li>
                 <% end %>
               </ul>
             </li>
@@ -47,10 +47,22 @@
 </nav>
 <div class="container">
   <% flash.each do |name, msg| %>
-      <%= content_tag :div, msg, class: "alert alert-info" %>
+      <%= content_tag :div, msg, class: "alert alert-#{alert_type(name)}" %>
   <% end %>
   <%= yield %>
 </div>
 
 </body>
+
+<footer>
+  <nav class="navbar">
+    <div class="container">
+      <ul class="nav navbar-nav navbar-left">
+        <li><%= Time.now.year%> Gestión de Eventos </li>
+      </ul>
+    </div>
+  </nav>
+</footer>
+
+
 </html>

@@ -1,3 +1,33 @@
 // Place all the styles related to the Events controller here.
 // They will automatically be included in application.scss.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+.comments{
+  margin-top: 50px;
+}
+
+footer{
+  margin-top: 30px;
+  div.container{
+    border-top: 1px solid rgb(227, 227, 227);
+  }
+}
+
+.url{
+  margin-top: 20px;
+}
+
+.remove{
+  color: red;
+}
+
+.img-responsive.event-image{
+  object-fit: cover;
+  height: 200px;
+  width: 100%;
+}
+
+.btn-primary:visited{
+  color: white;
+}
