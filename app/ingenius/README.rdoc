@@ -6,6 +6,10 @@
 
 * rake db:seed
 
-=== Username 
+== Testing
+
+* rake spec
+
+== Username
 
 email: 'test@test.com', password: 'test123'
