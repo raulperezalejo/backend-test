@@ -11,6 +11,16 @@ class SchedulesController < ApplicationController
 
   end
 
+  def destroy
+    @event = Event.friendly.find(params[:event_id])
+    Schedule.find(params[:id]).destroy
+    respond_to do |format|
+      format.html { redirect_to edit_event_path(@event), notice: 'Schedule was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
+
   private
 
     # Never trust parameters from the scary internet, only allow the white list through.

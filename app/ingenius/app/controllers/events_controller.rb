@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
   before_action :set_event, only: [:show, :edit, :update, :destroy]
-  before_action :set_place_category, only: [:new, :edit, :update]
+  before_action :set_place_category, only: [:new, :edit, :update, :create]
   before_action :set_schedules, only: [:new, :edit]
 
   # GET /events
@@ -85,6 +85,6 @@ class EventsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
-      params.require(:event).permit(:title, :description, :featured, :image, :place, :category, :dates, :category_id, :place_id)
+      params.require(:event).permit(:title, :description, :featured, :image, :category_id, :place_id)
     end
 end
